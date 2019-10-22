@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Copyright (c) 2019, Fabiano Engler Neto
+# All rights reserved. Licensed under BSD 2-Clause License.
+#
+# https://github.com/fabianoengler/cowfortune
+
+
+for dep in cowsay fortune ; do
+    if ! type -p $dep > /dev/null ; then
+        echo "Error: you need to have '$dep' program installed on your PATH."
+        exit -1
+    fi
+done
+
+cows="$(echo $(cowsay -l | grep -v 'Cow files in') | tr -s ' ' | tr ' ' $'\n')"
+num_cows=$(echo "$cows" | wc -l)
+cow_num=$(( ($RANDOM % $num_cows)+1 ))
+cow=$(echo "$cows" | head -n $cow_num | tail -n 1)
+
+fortune | cowsay -f $cow
